@@ -3,20 +3,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta charset="utf-8"/>
 
-{#    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>#}
-{#    <script src="//d3js.org/d3.v3.min.js" charset="utf-8"></script>#}
     <script src="{{ url_for('static', filename='jquery-2.1.4.min.js') }}"></script>
     <script src="{{ url_for('static', filename='d3.min.js') }}"></script>
-{#    <script src="{{ url_for('static', filename='drawer.js') }}"></script>#}
-    <style>
-        .axis path, .axis line {
-            fill: none;
-            stroke: black;
-        }
-        .axis text {
-            font-size: 11px;
-        }
-    </style>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" type="text/css" />
 </head>
 <body>
     <h1>GA sample</h1>

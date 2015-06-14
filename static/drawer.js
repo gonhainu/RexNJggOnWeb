@@ -50,7 +50,7 @@ svg.append('g')
         id: "children"
     });
 
-var state = 0
+var state = 0;
 $(function() {
     $('#test_btn').click(function() {
         init();
@@ -61,18 +61,21 @@ $(function() {
 $(function() {
     $('#next_btn').click(function() {
         if (state == 0) {
-            suvival_selection();
-            state = 1
+            survival_selection();
+            state = 1;
         } else if (state == 1) {
-            state = 2
             select_parent();
+            state = 2;
         } else if (state == 2) {
-            state = 0
             make_offspring();
+            state = 0;
         }
     })
-})
+});
 
+/**
+ * 親個体選択
+ */
 var select_parent = function() {
     $.ajax({
         type: 'POST',
@@ -101,6 +104,9 @@ var select_parent = function() {
     });
 };
 
+/**
+ * 子個体生成
+ */
 var make_offspring = function() {
     $.ajax({
         type: 'POST',
@@ -129,7 +135,10 @@ var make_offspring = function() {
     });
 };
 
-var suvival_selection = function() {
+/**
+ * 生存選択
+ */
+var survival_selection = function() {
     $.ajax({
         type: 'POST',
         url: '/survival',
@@ -168,6 +177,8 @@ var init = function() {
         dataType: 'json',
         success: function(json) {
             var dataset = json['population'];
+            svg.select('#parents').selectAll('circle').remove();
+            svg.select('#children').selectAll('circle').remove();
             var circle = svg.select('#population').selectAll('circle');
             var update = circle.data(dataset);
             var enter = update.enter();
