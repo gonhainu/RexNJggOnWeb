@@ -23,6 +23,7 @@ var xAxis = d3.svg.axis()
 var yAxis = d3.svg.axis()
     .scale(yScale)
     .orient("left");
+var timerId;
 
 svg.append('g')
     .attr({
@@ -52,11 +53,39 @@ svg.append('g')
 
 var state = 0;
 $(function() {
-    $('#test_btn').click(function() {
+    $('#start_btn').click(function() {
         init();
         state = 1;
+        timer();
     });
 });
+
+var timer = function() {
+    timerId = setTimeout(function(){
+        if (state == 0) {
+            survival_selection();
+            state = 1;
+        } else if (state == 1) {
+            select_parent();
+            state = 2;
+        } else if (state == 2) {
+            make_offspring();
+            state = 0;
+        }
+        timer()
+    }, 300);
+};
+
+$(function() {
+    $('#stop_btn').click(function() {
+        stop();
+    });
+});
+
+var stop = function() {
+    clearTimeout(timerId);
+};
+
 
 $(function() {
     $('#next_btn').click(function() {
@@ -77,10 +106,11 @@ $(function() {
  * 親個体選択
  */
 var select_parent = function() {
+    var npar = parseInt($('#npar').val());
     $.ajax({
         type: 'POST',
         url: '/parents',
-        data: JSON.stringify({'npar': 3}),
+        data: JSON.stringify({'npar': npar}),
         contentType: 'application/json',
         dataType: 'json',
         success: function(json) {
@@ -108,10 +138,11 @@ var select_parent = function() {
  * 子個体生成
  */
 var make_offspring = function() {
+    var nchi = parseInt($('#nchi').val());
     $.ajax({
         type: 'POST',
         url: '/children',
-        data: JSON.stringify({'nchi': 5 * 2}),
+        data: JSON.stringify({'nchi': nchi * 2}),
         contentType: 'application/json',
         dataType: 'json',
         success: function(json) {
@@ -139,10 +170,11 @@ var make_offspring = function() {
  * 生存選択
  */
 var survival_selection = function() {
+    var npar = parseInt($('#npar').val());
     $.ajax({
         type: 'POST',
         url: '/survival',
-        data: JSON.stringify({'npar': 3}),
+        data: JSON.stringify({'npar': npar}),
         contentType: 'application/json',
         dataType: 'json',
         success: function(json) {
@@ -164,15 +196,20 @@ var survival_selection = function() {
                 r: 5,
                 fill: 'red'
             });
+            var bestValue = json['bestvalue'];
+            var bestSol = json['bestsol'];
+            $('#best').html("f(x) = " + bestValue + ", x = [ " + bestSol.toString() + " ]");
+            if (bestValue < 1e-7) stop();
         }
     });
 };
 
 var init = function() {
+    var npop = parseInt($('#npop').val());
     $.ajax({
         type: 'POST',
         url: '/init',
-        data: JSON.stringify({'npop': 14 * 2}),
+        data: JSON.stringify({'npop': npop * 2}),
         contentType: 'application/json',
         dataType: 'json',
         success: function(json) {
@@ -194,6 +231,8 @@ var init = function() {
                 r: 5,
                 fill: 'red'
             });
+            var bestValue = json['bestvalue'];
+            $('#best').html("f(x) = " + bestValue);
         }
     });
 };

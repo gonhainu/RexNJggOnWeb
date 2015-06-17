@@ -82,7 +82,8 @@ class RexNJgg(object):
             s.f = self.func(s.x)
 
     def get_best_evaluation_value(self):
-        return min([s.f for s in self.population])
+        self.population.sort(key=lambda s: s.f)
+        return self.population[0].f, self.population[0].x
 
 
 if __name__ == '__main__':

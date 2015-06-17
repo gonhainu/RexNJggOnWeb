@@ -9,8 +9,19 @@
 </head>
 <body>
     <h1>GA sample</h1>
-    <input type="button" id="test_btn" value="start" />
+    <div id="npop_lbl">
+        集団サイズ:<input type="text" id="npop" value=14 size=10/>×n
+    </div>
+    <div id="npar_lbl">
+        親個体数:<input type="text" id="npar" value=3 size=10/>&gt; n
+    </div>
+    <div id="nchi_lbl">
+        子個体生成数:<input type="text" id="nchi" value=5 size=10/>×n
+    </div>
+    <input type="button" id="start_btn" value="start" />
+    <input type="button" id="stop_btn" value="stop" />
     <input type="button" id="next_btn" value="next" />
+    <div id="best">f(x) = </div>
 
     <script src="{{ url_for('static', filename='drawer.js') }}"></script>
 </body>

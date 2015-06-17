@@ -30,8 +30,8 @@ def init():
     npop = int(request.json['npop'])
     population = ga.initialize(int(npop))
     population = [s.x.tolist() for s in population]
-    evalue = ga.get_best_evaluation_value()
-    return jsonify({'population': population, 'evalue': evalue})
+    evalue, best_solution = ga.get_best_evaluation_value()
+    return jsonify({'population': population, 'evalue': evalue, 'bestsol': best_solution.tolist()})
     # except Exception as e:
     #     print(e)
     #     return jsonify({'error': e})
@@ -66,8 +66,8 @@ def survival_selection():
         npar = request.json['npar']
         population = ga.survival_selection(int(npar))
         population = [s.x.tolist() for s in population]
-        evalue = ga.get_best_evaluation_value()
-        return jsonify({'population': population, 'evalue': evalue})
+        evalue, best_solution = ga.get_best_evaluation_value()
+        return jsonify({'population': population, 'bestvalue': evalue, 'bestsol': best_solution.tolist()})
     except Exception as e:
         print(e)
         return jsonify({'error': e})
